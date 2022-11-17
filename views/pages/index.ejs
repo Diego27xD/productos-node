@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+  </head>
+  <body>
+    <nav class="navbar navbar-light py-3" style="background-color: black;">
+      <a class="navbar-brand" style="color: white;">Productos</a>
+      <form class="form-inline" enctype="multipart/form-data" method="post" action="/show">
+        <input class="form-control mr-sm-2" type="text" placeholder="Nombre" aria-label="Search" name="nombrec">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+      </form>
+    </nav>
+    <div class="container-fluid">
+    <main>
+        <div class="row py-3">
+            <div class="col-sm-8">
+                <table class="table table-striped table-hover table-bordered" id="tablaContactos" >
+                  <thead class="table table-primary text-center">
+                    <tr>
+                      <th style="display:none ;">ID</th>
+                      <th>Nombre</th>
+                      <th>Precio</th>
+                      <th>Stock</th>
+                      <th>Categoria</th>
+                      <th>Descripcion</th>
+                      <th>Imagen</th>
+                      <th>Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody class="text-center">
+                    <% productos.forEach((producto) => { %>
+                      <tr>
+                        <td style="display:none ;"><%= producto._id %></td>
+                        <td><%= producto.nombre %></td>
+                        <td><%= producto.precio %></td>
+                        <td><%= producto.stock %></td>
+                        <td><%= producto.categoria %></td>
+                        <td><%= producto.descripcion %></td>
+                        <td>
+                          <img src="<%= producto.imagen %>" width="130px">
+                        </td>
+                        <td>
+                          <a type="button" class="btn btn-warning btnEditar" data-toggle="modal" data-target="#exampleModal">Editar</a>
+                          
+                          <a class="btn btn-danger" href="/borrar/<%= producto._id %>">X</a>
+                        </td>
+                      </tr>
+                  <% }) %>
+                  </tbody>
+                </table>
+            </div>
+        
+            <div class="col-sm-4">
+              <div style="border: 1px solid black;">
+                <h3 class="text-center py-3 table-dark">Registrar contacto</h3>
+                <div class="container py-5">
+                <form method="POST" action="/upload" enctype="multipart/form-data">
+                  <div class="col py-2">
+                    <label for="nombre" class="form-label">Nombre</label>
+                    <input type="text" class="form-control" id="nombre" name="nombre">
+                  </div>
+                  <div class="col py-2">
+                    <label for="precio" class="form-label">Precio</label>
+                    <input type="text" class="form-control" id="precio" name="precio">
+                  </div>
+                  <div class="col py-2">
+                    <label for="stock" class="form-label">Stock</label>
+                    <input type="number" class="form-control" id="stock" name="stock">
+                  </div>
+                  <div class="col py-2">
+                    <label for="categoria" class="form-label">Categoria</label>
+                    <!-- <input type="text" class="form-control" id="categoria" name="categoria"> -->
+                    <select name="categoria" id="categoria" class="form-control">
+                      <option value="ninguno">Seleccionar ---</option>
+                      <option value="Tecnologia">Tecnologia</option>
+                      <option value="Muebles">Muebles</option>
+                      <option value="Ropa">Ropa</option>
+                    </select>
+                  </div>
+                  <div class="col py-2">
+                    <label for="descripcion" class="form-label">Description</label>
+                    <textarea type="text" class="form-control" id="descripcion" name="descripcion"></textarea>
+                  </div>
+                  <div class="col py-2">
+                    <label for="foto" class="form-label">Imagen</label>
+                    <input type="file" class="form-control-file" id="foto" name="foto">
+                  </div>
+                  <div class="col py-2">
+                    <input type="submit" value="Registrar" id="upload" class="btn btn-primary">
+                  </div>
+                </form>
+              </div>
+                <!-- <div class="col py-2">
+                  <form method="POST" action="/show" enctype="multipart/form-data">
+                    <label for="apellido" class="form-label">Buscar</label>
+                    <div class="form-row">
+                      <div class="form-group col-md-8">
+                        <input type="text" class="form-control" id="apellido" name="apellido">
+                      </div>
+                      <div class="form-group col-md-4 text-right">
+                        <input type="submit" value="Buscar" id="upload2" class="btn btn-primary">
+                      </div>
+                    </div>
+                  </form>
+                </div> -->
+            </div>
+          </div>
+        </div>
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Editar contacto</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <form method="POST" action="/editar" enctype="multipart/form-data">
+                  <input type="text" name="id_editar" id="id_editar" hidden>
+                  <div class="col py-2">
+                    <label for="nombre_edit" class="form-label">Nombre</label>
+                    <input type="text" class="form-control" id="nombre_edit" name="nombre_edit">
+                  </div>
+                  <div class="col py-2">
+                    <label for="precio_edit" class="form-label">Precio</label>
+                    <input type="text" class="form-control" id="precio_edit" name="precio_edit">
+                  </div>
+                  <div class="col py-2">
+                    <label for="stock_edit" class="form-label">Stock</label>
+                    <input type="number" class="form-control" id="stock_edit" name="stock_edit">
+                  </div>
+                  <div class="col py-2">
+                    <label for="categoria_edit" class="form-label">Categoria</label>
+                    <!-- <input type="text" class="form-control" id="categoria_edit" name="categoria_edit"> -->
+                    <select name="categoria_edit" id="categoria_edit" class="form-control">
+                      <option value="Tecnologia">Tecnologia</option>
+                      <option value="Muebles">Muebles</option>
+                      <option value="Ropa">Ropa</option>
+                    </select>
+                  </div>
+                  <div class="col py-2">
+                    <label for="descripcion_edit" class="form-label">Descripcion</label>
+                    <textarea type="" class="form-control" id="descripcion_edit" name="descripcion_edit"></textarea>
+                  </div>
+                  <div class="col py-2">
+                    <label for="foto_edit" class="form-label">Foto</label>
+                    <input type="file" class="form-control-file" id="foto_edit" name="foto_edit">
+                  </div>
+                  <div class="col py-2">
+                    <input type="submit" value="Save changes" id="edit" class="btn btn-primary">
+                  </div>
+                </form>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    <footer class="py-3" style="background-color: black;">
+      <p class="text-center text-muted" style="color: white;">© Copyright 2020 The Awesome People</p>
+    </footer>
+    
+  </body>
+  <script>
+    const on = (element, event, selector, handler) => {
+    element.addEventListener(event, e => {
+        if(e.target.closest(selector)){
+            handler(e)
+        }
+    })
+  }
+  on(document, 'click','.btnEditar', e => {
+    const fila = e.target.parentNode.parentNode
+      id_editar.value = fila.children[0].innerHTML
+      nombre_edit.value = fila.children[1].innerHTML
+      precio_edit.value = fila.children[2].innerHTML
+      stock_edit.value = fila.children[3].innerHTML
+      categoria_edit.value = fila.children[4].innerHTML
+      descripcion_edit.value = fila.children[5].innerHTML
+  })
+  </script>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js" integrity="sha384-+sLIOodYLS7CIrQpBjl+C7nPvqq+FbNUBDunl/OZv93DB7Ln/533i8e/mZXLi/P+" crossorigin="anonymous"></script>
+</html>
